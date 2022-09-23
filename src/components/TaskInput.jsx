@@ -1,6 +1,6 @@
-function TaskInput(props){
+function TaskInput({value, handleInput, handleAddTask}){
     return (
-        <input type="text" value={props.value} onChange={props.handleInput} onKeyUp={props.handleAddTask}/>
+        <input type="text" value={value} onChange={handleInput} onKeyUp={handleAddTask}/>
     )
 }
 
