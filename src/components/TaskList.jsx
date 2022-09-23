@@ -1,3 +1,5 @@
+import TaskItem from "./TaskItem";
+
 function TaskList({tasks, filters, handleChangeStatus, handleDelete}) {
 
     return (
@@ -5,14 +7,11 @@ function TaskList({tasks, filters, handleChangeStatus, handleDelete}) {
             {tasks
                 .filter((task) => filters === 'all' ? true : task.status === filters)
                 .map((task) => (
-                    <li key={task.id} className="task">
-                        <span className={task.status ? 'status active' : 'status'}
-                              onClick={() => {
-                                  handleChangeStatus(task)
-                              }}></span>
-                        <span>{task.name}</span>
-                        <button className="task-delete" onClick={() => handleDelete(task)}>x</button>
-                    </li>
+                    <TaskItem
+                        key={task.id}
+                        task={task}
+                        handleChangeStatus={handleChangeStatus}
+                        handleDelete={handleDelete}/>
                 ))}
         </ul>
     )
