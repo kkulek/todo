@@ -1,5 +1,6 @@
 import Counter from "./Counter";
 import Filters from "./Filters";
+import DeleteCompletedBtn from "./DeleteCompletedBtn";
 
 function Footer({tasks, filters, setFilters, handleDeleteCompleted}){
     return (
@@ -8,9 +9,7 @@ function Footer({tasks, filters, setFilters, handleDeleteCompleted}){
             <Filters filters={filters} setFilters={setFilters}/>
 
             {tasks.some((task) => task.status) && (
-                <div>
-                    <button onClick={handleDeleteCompleted}>Clear completed</button>
-                </div>
+                <DeleteCompletedBtn handleDeleteCompleted={handleDeleteCompleted}/>
             )}
         </footer>
     )
