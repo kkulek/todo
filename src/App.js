@@ -2,6 +2,7 @@ import './App.scss';
 import {useState} from "react";
 import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
+import Footer from "./components/Footer";
 
 const gen = (id = 0) => () => id++;
 const genId = gen()
@@ -57,29 +58,14 @@ function App() {
                         handleChangeStatus={handleChangeStatus}
                         handleDelete={handleDelete}
                     />
-                    <div>
-                        {tasks.filter((task) => !task.status).length} items left
-                    </div>
-                    <div>
-                        <button className={filters === 'all' ? 'filter-active' : ''}
-                                onClick={() => setFilters('all')}>All
-                        </button>
-                        <button className={filters === false ? 'filter-active' : ''}
-                                onClick={() => setFilters(false)}>Active
-                        </button>
-                        <button className={filters === true ? 'filter-active' : ''}
-                                onClick={() => setFilters(true)}>Completed
-                        </button>
-                    </div>
-
-                    {tasks.some((task) => task.status) && (
-                        <div>
-                            <button onClick={handleDeleteCompleted}>Clear completed</button>
-                        </div>
-                    )}
+                    <Footer
+                        filters={filters}
+                        setFilters={setFilters}
+                        tasks={tasks}
+                        handleDeleteCompleted={handleDeleteCompleted}
+                    />
                 </div>
             )}
-
         </div>
     );
 }
