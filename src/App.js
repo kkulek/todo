@@ -8,15 +8,11 @@ const gen = (id = 0) => () => id++;
 const genId = gen();
 
 class App extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
+    state = {
             value: '',
             tasks: [],
             filters: 'all'
         }
-    }
 
     handleInput = (event) => {
         this.setState({value: event.target.value});
