@@ -1,5 +1,6 @@
 import './App.scss';
 import {useState} from "react";
+import TaskInput from "./components/TaskInput";
 
 const gen = (id = 0) => () => id++;
 const genId = gen()
@@ -18,7 +19,7 @@ function App() {
             setTask([...tasks, {
                 id: genId(),
                 name: value.trim(),
-                status: false,
+                status: false
             }]);
             setValue('');
         }
@@ -26,7 +27,7 @@ function App() {
 
     const handleChangeStatus = (todo) => {
         const updatedTasks = tasks.map((task) => {
-            if (task === todo){
+            if (task === todo) {
                 task.status = !task.status;
             }
             return task;
@@ -45,33 +46,47 @@ function App() {
 
     return (
         <div className="App">
-            <input type="text" value={value} onChange={handleInput} onKeyUp={handleAddTask}/>
-            <ul className="tasks">
-                {tasks
-                    .filter((task) => filters === 'all' ? true : task.status === filters)
-                    .map((task) => (
-                    <li key={task.id} className="task">
+            <TaskInput value={value} handleInput={handleInput} handleAddTask={handleAddTask}/>
+
+            {!tasks.length || (
+                <div>
+                    <ul className="tasks">
+                        {tasks
+                            .filter((task) => filters === 'all' ? true : task.status === filters)
+                            .map((task) => (
+                                <li key={task.id} className="task">
                         <span className={task.status ? 'status active' : 'status'}
-                              onClick={() => {handleChangeStatus(task)}}></span>
-                        <span>{task.name}</span>
-                        <button className="task-delete" onClick={() => handleDelete(task)}>x</button>
-                    </li>
-                ))}
-            </ul>
+                              onClick={() => {
+                                  handleChangeStatus(task)
+                              }}></span>
+                                    <span>{task.name}</span>
+                                    <button className="task-delete" onClick={() => handleDelete(task)}>x</button>
+                                </li>
+                            ))}
+                    </ul>
+                    <div>
+                        {tasks.filter((task) => !task.status).length} items left
+                    </div>
+                    <div>
+                        <button className={filters === 'all' ? 'filter-active' : ''}
+                                onClick={() => setFilters('all')}>All
+                        </button>
+                        <button className={filters === false ? 'filter-active' : ''}
+                                onClick={() => setFilters(false)}>Active
+                        </button>
+                        <button className={filters === true ? 'filter-active' : ''}
+                                onClick={() => setFilters(true)}>Completed
+                        </button>
+                    </div>
 
-            <div>
-                {tasks.filter((task) => !task.status).length} items left
-            </div>
+                    {tasks.some((task) => task.status) && (
+                        <div>
+                            <button onClick={handleDeleteCompleted}>Clear completed</button>
+                        </div>
+                    )}
+                </div>
+            )}
 
-            <div>
-                <button className={filters === 'all' ? 'filter-active' : ''} onClick={() => setFilters('all')}>All</button>
-                <button className={filters === false ? 'filter-active' : ''} onClick={() => setFilters(false)}>Active</button>
-                <button className={filters === true ? 'filter-active' : ''} onClick={() => setFilters(true)}>Completed</button>
-            </div>
-
-            <div>
-                <button onClick={handleDeleteCompleted}>Clear completed</button>
-            </div>
         </div>
     );
 }
