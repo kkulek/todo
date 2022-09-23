@@ -1,6 +1,7 @@
 import './App.scss';
 import {useState} from "react";
 import TaskInput from "./components/TaskInput";
+import TaskList from "./components/TaskList";
 
 const gen = (id = 0) => () => id++;
 const genId = gen()
@@ -50,20 +51,12 @@ function App() {
 
             {!tasks.length || (
                 <div>
-                    <ul className="tasks">
-                        {tasks
-                            .filter((task) => filters === 'all' ? true : task.status === filters)
-                            .map((task) => (
-                                <li key={task.id} className="task">
-                        <span className={task.status ? 'status active' : 'status'}
-                              onClick={() => {
-                                  handleChangeStatus(task)
-                              }}></span>
-                                    <span>{task.name}</span>
-                                    <button className="task-delete" onClick={() => handleDelete(task)}>x</button>
-                                </li>
-                            ))}
-                    </ul>
+                    <TaskList
+                        tasks={tasks}
+                        filters={filters}
+                        handleChangeStatus={handleChangeStatus}
+                        handleDelete={handleDelete}
+                    />
                     <div>
                         {tasks.filter((task) => !task.status).length} items left
                     </div>
