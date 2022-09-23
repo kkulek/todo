@@ -5,7 +5,7 @@ import TaskList from "./components/TaskList";
 import Footer from "./components/Footer";
 
 const gen = (id = 0) => () => id++;
-const genId = gen()
+const genId = gen();
 
 class App extends Component {
 
@@ -18,11 +18,11 @@ class App extends Component {
         }
     }
 
-    handleInput(event){
+    handleInput = (event) => {
         this.setState({value: event.target.value});
     }
 
-    handleAddTask(event){
+    handleAddTask = (event) => {
         const {value, tasks} = this.state;
         if (event.key === 'Enter' && value.trim() !== '') {
             this.setState({
@@ -36,7 +36,7 @@ class App extends Component {
         }
     }
 
-    handleChangeStatus(todo){
+    handleChangeStatus = (todo) => {
         const tasks = this.state.tasks.map((task) => {
             if (task === todo) {
                 task.status = !task.status;
@@ -47,19 +47,19 @@ class App extends Component {
         this.setState({tasks})
     }
 
-    handleDelete(todo){
+    handleDelete = (todo) => {
         this.setState({
             tasks: this.state.tasks.filter((task) => task !== todo)
         })
     }
 
-    handleDeleteCompleted(){
+    handleDeleteCompleted = () => {
         this.setState({
             tasks: this.state.tasks.filter((task) => !task.status)
         });
     }
 
-    setFilters(filters){
+    setFilters = (filters) => {
         this.setState({filters})
     }
 
@@ -68,21 +68,21 @@ class App extends Component {
 
         return (
             <main className="App">
-                <TaskInput value={value} handleInput={this.handleInput.bind(this)} handleAddTask={this.handleAddTask.bind(this)}/>
+                <TaskInput value={value} handleInput={this.handleInput} handleAddTask={this.handleAddTask}/>
 
                 {!tasks.length || (
                     <>
                         <TaskList
                             tasks={tasks}
                             filters={filters}
-                            handleChangeStatus={this.handleChangeStatus.bind(this)}
-                            handleDelete={this.handleDelete.bind(this)}
+                            handleChangeStatus={this.handleChangeStatus}
+                            handleDelete={this.handleDelete}
                         />
                         <Footer
                             filters={filters}
-                            setFilters={this.setFilters.bind(this)}
+                            setFilters={this.setFilters}
                             tasks={tasks}
-                            handleDeleteCompleted={this.handleDeleteCompleted.bind(this)}
+                            handleDeleteCompleted={this.handleDeleteCompleted}
                         />
                     </>
                 )}
