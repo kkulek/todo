@@ -1,5 +1,5 @@
 import './App.scss';
-import {useState} from "react";
+import {Component} from "react";
 import TaskInput from "./components/TaskInput";
 import TaskList from "./components/TaskList";
 import Footer from "./components/Footer";
@@ -7,67 +7,88 @@ import Footer from "./components/Footer";
 const gen = (id = 0) => () => id++;
 const genId = gen()
 
-function App() {
-    const [value, setValue] = useState('');
-    const [tasks, setTask] = useState([]);
-    const [filters, setFilters] = useState('all');
+class App extends Component {
 
-    const handleInput = (event) => {
-        setValue(event.target.value);
-    }
-
-    const handleAddTask = (event) => {
-        if (event.key === 'Enter' && value.trim() !== '') {
-            setTask([...tasks, {
-                id: genId(),
-                name: value.trim(),
-                status: false
-            }]);
-            setValue('');
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: '',
+            tasks: [],
+            filters: 'all'
         }
     }
 
-    const handleChangeStatus = (todo) => {
-        const updatedTasks = tasks.map((task) => {
+    handleInput(event){
+        this.setState({value: event.target.value});
+    }
+
+    handleAddTask(event){
+        const {value, tasks} = this.state;
+        if (event.key === 'Enter' && value.trim() !== '') {
+            this.setState({
+                tasks: [...tasks, {
+                    id: genId(),
+                    name: value.trim(),
+                    status: false
+                }],
+                value: ''
+            });
+        }
+    }
+
+    handleChangeStatus(todo){
+        const tasks = this.state.tasks.map((task) => {
             if (task === todo) {
                 task.status = !task.status;
             }
             return task;
         });
 
-        setTask(updatedTasks);
+        this.setState({tasks})
     }
 
-    const handleDelete = (todo) => {
-        setTask(tasks.filter((task) => task !== todo))
+    handleDelete(todo){
+        this.setState({
+            tasks: this.state.tasks.filter((task) => task !== todo)
+        })
     }
 
-    const handleDeleteCompleted = () => {
-        setTask(tasks.filter((task) => !task.status));
+    handleDeleteCompleted(){
+        this.setState({
+            tasks: this.state.tasks.filter((task) => !task.status)
+        });
     }
 
-    return (
-        <div className="App">
-            <TaskInput value={value} handleInput={handleInput} handleAddTask={handleAddTask}/>
+    setFilters(filters){
+        this.setState({filters})
+    }
 
-            {!tasks.length || (
-                <div>
-                    <TaskList
-                        tasks={tasks}
-                        filters={filters}
-                        handleChangeStatus={handleChangeStatus}
-                        handleDelete={handleDelete}
-                    />
-                    <Footer
-                        filters={filters}
-                        setFilters={setFilters}
-                        tasks={tasks}
-                        handleDeleteCompleted={handleDeleteCompleted}
-                    />
-                </div>
-            )}
-        </div>
-    );
+    render() {
+        const {value, tasks, filters} = this.state
+
+        return (
+            <main className="App">
+                <TaskInput value={value} handleInput={this.handleInput.bind(this)} handleAddTask={this.handleAddTask.bind(this)}/>
+
+                {!tasks.length || (
+                    <>
+                        <TaskList
+                            tasks={tasks}
+                            filters={filters}
+                            handleChangeStatus={this.handleChangeStatus.bind(this)}
+                            handleDelete={this.handleDelete.bind(this)}
+                        />
+                        <Footer
+                            filters={filters}
+                            setFilters={this.setFilters.bind(this)}
+                            tasks={tasks}
+                            handleDeleteCompleted={this.handleDeleteCompleted.bind(this)}
+                        />
+                    </>
+                )}
+            </main>
+        );
+    }
 }
 
 export default App;
